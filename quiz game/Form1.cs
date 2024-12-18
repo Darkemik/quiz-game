@@ -1,18 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace quiz_game
 {
     public partial class Form1 : Form
     {
-        // quiz game variables
         int correctAnswer;
         int questionNumber = 1;
         int score;
@@ -21,6 +13,7 @@ namespace quiz_game
         public Form1()
         {
             InitializeComponent();
+            this.StartPosition = FormStartPosition.CenterScreen;
             askQuestion(questionNumber);
             totalQuestions = 8;
         }
@@ -28,27 +21,41 @@ namespace quiz_game
         {
             var senderObject = (Button)sender;
             int buttonTag = Convert.ToInt32(senderObject.Tag);
+
             if (buttonTag == correctAnswer)
             {
                 score++;
             }
+
             if (questionNumber == totalQuestions)
             {
-                // work out the percentage
                 percentage = (score * 100) / totalQuestions;
-                MessageBox.Show(
-                    "Quiz Ended!" + Environment.NewLine +
-                    "You have answered " + score + " questions correctly." + Environment.NewLine +
-                    "Your total percentage is " + percentage + "%" + Environment.NewLine +
-                    "Click OK to play again"
-                    );
-                score = 0;
-                questionNumber = 0;
+
+                DialogResult result = MessageBox.Show(
+                    caption: "GAME ENDED!",
+                    text: $"Your final score is: {score}/{totalQuestions} \nYour percentage: {percentage}%\nPress Yes to play again, No to exit.",
+                    buttons: MessageBoxButtons.YesNo,
+                    icon: MessageBoxIcon.Information
+                );
+
+                if (result == DialogResult.Yes)
+                {
+                    score = 0;
+                    questionNumber = 1;
+                    askQuestion(questionNumber);
+                }
+                else
+                {
+                    Application.Exit();
+                }
+            }
+            else
+            {
+                questionNumber++;
                 askQuestion(questionNumber);
             }
-            questionNumber++;
-            askQuestion(questionNumber);
         }
+
         private void askQuestion(int qnum)
         {
             switch (qnum)
@@ -117,7 +124,7 @@ namespace quiz_game
                     correctAnswer = 1;
                     break;
                 case 8:
-                    pictureBox1.Image = Properties.Resources.question2  ;
+                    pictureBox1.Image = Properties.Resources.question2;
                     lblQuestion.Text = "Mi történik, ha túl gyorsan építesz egy házat a Minecraft-ban?";
                     button1.Text = "Elindul az “építész rendőrség”";
                     button2.Text = "A Creeper beköltözik és megöl";
