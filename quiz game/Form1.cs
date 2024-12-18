@@ -35,7 +35,7 @@ namespace quiz_game
             if (questionNumber == totalQuestions)
             {
                 // work out the percentage
-                percentage = (int)Math.Round((double)(score * 100) / totalQuestions);
+                percentage = (score * 100) / totalQuestions;
                 MessageBox.Show(
                     "Quiz Ended!" + Environment.NewLine +
                     "You have answered " + score + " questions correctly." + Environment.NewLine +
